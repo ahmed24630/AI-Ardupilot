@@ -34,6 +34,12 @@ yourself with `sudo`, never executed automatically.
   closer to tool results instead of embellishing; a "strict/grounded"
   preset (temperature 0.1) is offered as the recommended default for a
   control system
+- **Model catalog with real capability info** — a curated list (Llama 3.2,
+  Qwen 2.5, Gemma 2, vision-capable variants, etc.) showing download size,
+  RAM needs, whether each model supports vision, and whether it supports
+  tool-calling (required for this project's architecture). Selecting a
+  model that isn't yet installed triggers a real `ollama pull` with live
+  progress output.
 
 ## Build
 
@@ -86,6 +92,16 @@ itself (the model can only report what `look_around`/`get_telemetry`/etc.
 actually returned) — temperature is a meaningful second layer on top of that,
 not a replacement for it.
 
+## Important: no local model handles audio natively
+
+The model catalog's "capabilities" only cover text and vision (camera
+images). **Speech input always goes through faster-whisper separately**
+(see `perception.py`) — this is true regardless of which chat model you
+pick here, because no general-purpose local LLM handles raw audio well.
+Vision-capable models (marked "Vision: yes" in the catalog) can process
+camera frames directly in addition to the YOLO detector already in this
+project — they're not a replacement for the speech pipeline.
+
 ## Files
 
 ```
@@ -95,6 +111,7 @@ ai_pilot_setup/
     ├── main.cpp                interactive CLI flow
     ├── board_detect.hpp/.cpp   identifies the board from real system files
     ├── device_scan.hpp/.cpp    scans real serial/video/audio devices + permissions
-    ├── vehicle_profile.hpp/.cpp  per-vehicle-type safety presets + real Ollama model list
+    ├── vehicle_profile.hpp/.cpp  per-vehicle-type safety presets + Ollama pull/list
+    ├── model_catalog.hpp/.cpp  curated model list with capability info
     └── config_writer.hpp/.cpp  writes config.json for the Python side to read
 ```

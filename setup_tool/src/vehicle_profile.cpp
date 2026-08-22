@@ -3,6 +3,7 @@
 #include <memory>
 #include <array>
 #include <sstream>
+#include <iostream>
 
 std::string vehicle_type_to_string(VehicleType type) {
     switch (type) {
@@ -90,4 +91,25 @@ std::vector<std::string> list_installed_ollama_models() {
     }
 
     return models;
+}
+
+bool pull_ollama_model(const std::string& tag) {
+    std::string cmd = "ollama pull " + tag + " 2>&1";
+    std::array<char, 512> buffer{};
+
+    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd.c_str(), "r"), pclose);
+    if (!pipe) {
+        std::cerr << "Could not run 'ollama pull' — is Ollama installed and on PATH?\n";
+        return false;
+    }
+
+    // Stream real output live rather than waiting silently — pull can take
+    // a while for larger models, and the user should see actual progress.
+    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
+        std::cout << buffer.data();
+        std::cout.flush();
+    }
+
+    int exit_code = pclose(pipe.release());
+    return exit_code == 0;
 }

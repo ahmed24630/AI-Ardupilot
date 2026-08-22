@@ -11,10 +11,13 @@
 #include <iomanip>
 #include <string>
 #include <limits>
+#include <algorithm>
+#include <cstdlib>
 #include "board_detect.hpp"
 #include "device_scan.hpp"
 #include "config_writer.hpp"
 #include "vehicle_profile.hpp"
+#include "model_catalog.hpp"
 
 static void print_header(const std::string& title) {
     std::cout << "\n=== " << title << " ===\n";
@@ -27,6 +30,10 @@ static int prompt_choice(const std::string& question, int max_valid) {
         if (std::cin >> choice && choice >= 1 && choice <= max_valid) {
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             return choice;
+        }
+        if (std::cin.eof()) {
+            std::cerr << "\nInput ended unexpectedly. Exiting.\n";
+            std::exit(1);
         }
         std::cout << "Invalid choice, try again.\n";
         std::cin.clear();
@@ -44,6 +51,10 @@ static double prompt_double(const std::string& question) {
         if (std::cin >> value) {
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             return value;
+        }
+        if (std::cin.eof()) {
+            std::cerr << "\nInput ended unexpectedly. Exiting.\n";
+            std::exit(1);
         }
         std::cout << "Invalid number, try again.\n";
         std::cin.clear();
@@ -208,22 +219,92 @@ int main() {
     // -------------------------------------------------------------
     // 7. AI model selection and tuning
     // -------------------------------------------------------------
-    print_header("AI Model Selection");
-    auto installed_models = list_installed_ollama_models();
-    ModelTuning tuning;
+    print_header("AI Model Catalog");
+    std::cout << "Note: none of these models handle audio directly — spoken\n";
+    std::cout << "commands always go through faster-whisper separately, regardless\n";
+    std::cout << "of which model you pick here. \"Vision\" below means the model can\n";
+    std::cout << "natively process camera images itself (in addition to the YOLO\n";
+    std::cout << "object detector this project already uses).\n\n";
 
-    if (installed_models.empty()) {
-        std::cout << "No Ollama models found (ollama not installed, or none pulled yet).\n";
-        std::cout << "Enter a model name to use once you pull it (e.g. llama3.2): ";
-        std::getline(std::cin, tuning.model_name);
-        if (tuning.model_name.empty()) tuning.model_name = "llama3.2";
-    } else {
-        std::cout << "Installed models found:\n";
-        for (size_t i = 0; i < installed_models.size(); ++i) {
-            std::cout << "  [" << (i + 1) << "] " << installed_models[i] << "\n";
+    const auto& catalog = get_model_catalog();
+    for (size_t i = 0; i < catalog.size(); ++i) {
+        const auto& m = catalog[i];
+        std::cout << "  [" << (i + 1) << "] " << m.display_name
+                   << " (" << m.ollama_tag << ")\n";
+        std::cout << "        " << m.description << "\n";
+        std::cout << "        Vision: " << (m.supports_vision ? "yes" : "no")
+                   << "  |  Tool-calling: " << (m.supports_tool_calling ? "yes" : "no")
+                   << "  |  ~" << m.approx_size_gb << "GB download"
+                   << "  |  recommends ~" << m.min_ram_recommended_gb << "GB+ RAM\n";
+        std::cout << "        Best for: " << m.best_for << "\n\n";
+    }
+
+    auto installed_models = list_installed_ollama_models();
+    int already_installed_option = (int)catalog.size() + 1;
+    int manual_entry_option = (int)catalog.size() + 2;
+
+    std::cout << "  [" << already_installed_option << "] Choose from models already installed on this board";
+    if (!installed_models.empty()) {
+        std::cout << " (" << installed_models.size() << " found)";
+    }
+    std::cout << "\n";
+    std::cout << "  [" << manual_entry_option << "] Enter a custom Ollama model tag manually\n";
+
+    int model_choice = prompt_choice("\nSelect a model:", manual_entry_option);
+
+    ModelTuning tuning;
+    bool needs_pull = false;
+
+    if (model_choice <= (int)catalog.size()) {
+        const auto& selected = catalog[model_choice - 1];
+        tuning.model_name = selected.ollama_tag;
+
+        if (!selected.supports_tool_calling) {
+            std::cout << "\nWarning: " << selected.display_name << " does not support "
+                      << "tool-calling, which this project's AI pilot architecture "
+                      << "requires (it's how the AI calls flight/perception functions "
+                      << "instead of just talking). This model will likely not work "
+                      << "correctly as the main pilot brain.\n";
+            int proceed = prompt_choice("Proceed anyway? (1=yes, 2=pick a different model)", 2);
+            if (proceed == 2) {
+                std::cout << "Re-run the tool to pick again.\n";
+                return 1;
+            }
         }
-        int choice = prompt_choice("Select model to use:", (int)installed_models.size());
-        tuning.model_name = installed_models[choice - 1];
+
+        bool already_have_it = std::find(installed_models.begin(), installed_models.end(),
+                                          selected.ollama_tag) != installed_models.end();
+        needs_pull = !already_have_it;
+
+    } else if (model_choice == already_installed_option) {
+        if (installed_models.empty()) {
+            std::cout << "No models currently installed. Enter a tag to pull manually: ";
+            std::getline(std::cin, tuning.model_name);
+        } else {
+            for (size_t i = 0; i < installed_models.size(); ++i) {
+                std::cout << "  [" << (i + 1) << "] " << installed_models[i] << "\n";
+            }
+            int choice = prompt_choice("Select installed model:", (int)installed_models.size());
+            tuning.model_name = installed_models[choice - 1];
+        }
+    } else {
+        std::cout << "Enter Ollama model tag (e.g. mistral:7b): ";
+        std::getline(std::cin, tuning.model_name);
+        needs_pull = true;  // unknown to us whether it's installed; try pulling, ollama no-ops if already present
+    }
+
+    if (needs_pull) {
+        std::cout << "\nDownloading " << tuning.model_name << " via 'ollama pull'...\n";
+        bool ok = pull_ollama_model(tuning.model_name);
+        if (!ok) {
+            std::cout << "\nDownload failed or Ollama isn't installed/running. "
+                       "You can pull it manually later with:\n";
+            std::cout << "  ollama pull " << tuning.model_name << "\n";
+            std::cout << "Continuing setup — config.json will reference this model name "
+                       "regardless, so it'll work once pulled.\n";
+        } else {
+            std::cout << "Download complete.\n";
+        }
     }
 
     std::cout << "\nTemperature controls how deterministic vs. creative responses are.\n";

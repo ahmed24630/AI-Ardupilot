@@ -43,3 +43,8 @@ VehicleProfile default_profile_for(VehicleType type);
 // is present. Returns empty vector if ollama isn't installed or has no
 // models pulled yet.
 std::vector<std::string> list_installed_ollama_models();
+
+// Runs `ollama pull <tag>` and streams its real progress output live to
+// stdout as it downloads, so the user sees actual download progress rather
+// than a silent wait. Returns true if the command exited successfully.
+bool pull_ollama_model(const std::string& tag);
