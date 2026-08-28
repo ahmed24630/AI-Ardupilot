@@ -6,7 +6,7 @@
 # Lines starting with # are comments and are ignored.
 # Blank lines are ignored.
 
-src/main.cpp
+Src/main.cpp
 
 # Add more as you build them, e.g.:
 # src/board_detect.cpp
