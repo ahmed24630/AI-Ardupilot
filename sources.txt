@@ -1,0 +1,14 @@
+# sources.txt — one source file path per line, relative to this file's directory.
+# Lines starting with # are comments and are ignored.
+# Blank lines are ignored.
+#
+# This is read by CMakeLists.txt via file(STRINGS ...) — as you write each
+# new .cpp file for your own version of the project, add one line here.
+# Nothing in CMakeLists.txt needs to change when you add a file.
+#
+# Example, once you have a new source file:
+src/main.cpp
+
+# Add more as you build them, e.g.:
+# src/board_detect.cpp
+# src/device_scan.cpp
