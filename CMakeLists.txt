@@ -108,9 +108,9 @@ endif()
 # --- Output naming and location --------------------------------------------
 # Force the binary into <build-dir>/bin/, regardless of how this build
 # directory was created or named. This makes "where did my binary go"
-# unambiguous — it's always <build-dir>/bin/ai_pilot_setup-<BOARD>, whether
+# unambiguous — it's always <build-dir>/bin/ai_ARDUPILOT-<BOARD>, whether
 # you ran `cmake -B build/native` or `cd somewhere && cmake /path/to/project`.
-set_target_properties(ai_pilot_setup PROPERTIES
-    OUTPUT_NAME "ai_pilot_setup-${BOARD}"
+set_target_properties(ai_ARDUPILOT PROPERTIES
+    OUTPUT_NAME "ai_ARDUPILOT-${BOARD}"
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
 )
