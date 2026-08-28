@@ -29,8 +29,24 @@ foreach(LINE ${RAW_SOURCE_LINES})
     if(TRIMMED_LINE MATCHES "^#")
         continue()  # skip comment lines
     endif()
+    # Extra safety net: only accept lines that actually look like a source
+    # or header path. file(STRINGS) can split a comment line into fragments
+    # in unexpected places (e.g. around certain punctuation), which would
+    # otherwise let a stray fragment slip through even though it never
+    # started with #. Requiring a .cpp/.hpp ending catches that case too.
+    # (.hpp files won't be compiled as their own translation units — CMake
+    # only does that for .cpp — but listing them here makes IDEs like CLion
+    # or VS Code show them in the project tree alongside their .cpp files.)
+    if(NOT TRIMMED_LINE MATCHES "\\.(cpp|hpp)$")
+        message(WARNING "Ignoring unexpected line in sources.txt (doesn't end in .cpp or .hpp): ${TRIMMED_LINE}")
+        continue()
+    endif()
     list(APPEND PROJECT_SOURCES "${CMAKE_SOURCE_DIR}/${TRIMMED_LINE}")
 endforeach()
+
+if(NOT PROJECT_SOURCES)
+    message(FATAL_ERROR "No valid source files found in sources.txt. Check the file has at least one line ending in .cpp or .hpp that isn't commented out.")
+endif()
 
 message(STATUS "Building with sources: ${PROJECT_SOURCES}")
 

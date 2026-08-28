@@ -1,14 +1,13 @@
-# sources.txt — one source file path per line, relative to this file's directory.
+# sources.txt - one source or header file path per line, relative to this
+# file's directory. Both .cpp and .hpp are accepted - headers won't be
+# separately compiled, but listing them here makes them show up in IDEs
+# like CLion or VS Code alongside their .cpp files.
+#
 # Lines starting with # are comments and are ignored.
 # Blank lines are ignored.
-#
-# This is read by CMakeLists.txt via file(STRINGS ...) — as you write each
-# new .cpp file for your own version of the project, add one line here.
-# Nothing in CMakeLists.txt needs to change when you add a file.
-#
-# Example, once you have a new source file:
+
 src/main.cpp
 
 # Add more as you build them, e.g.:
 # src/board_detect.cpp
-# src/device_scan.cpp
+# src/board_detect.hpp
