@@ -1,17 +1,17 @@
 #include "Ready.hpp"
 
-class READY : public state {
-    public:
-        virtual state* handle(Event e){
-            if (e == Event::EVENT_READY){
-                return &Ready_State;
-            }
-            if (e == Event::EVENT_RUNNING){
-                return &Running_State;
-            }
-            if (e == Event::EVENT_STOP){
-                return &Stop_State;
-            }
-        };
-        virtual std::string name() const {return "READY";};
+state* READY::handle(Event e) {
+    if (e == Event::EVENT_READY){
+        return &Ready_State;
+    }
+    if (e == Event::EVENT_RUNNING){
+        return &Running_State;
+    }
+    if (e == Event::EVENT_STOP){
+        return &Stop_State;
+    }
+};
+
+std::string READY::name() const {
+    return "READY";
 };
