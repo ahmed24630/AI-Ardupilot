@@ -17,4 +17,7 @@ class state {
 
 };
 
+extern void state_machine_engine(void);
+
+
 #endif // State_Context
