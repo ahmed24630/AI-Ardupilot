@@ -7,6 +7,15 @@
 # Blank lines are ignored.
 
 Src/main.cpp
+Src/App_Transitions/Ready.cpp
+Src/App_Transitions/Ready.hpp
+Src/App_Transitions/Running.cpp
+Src/App_Transitions/Running.hpp
+Src/App_Transitions/Stop.cpp
+Src/App_Transitions/Stop.hpp
+Src/App_Transitions/State_Context.cpp
+Src/App_Transitions/State_Context.hpp
+
 
 # Add more as you build them, e.g.:
 # src/board_detect.cpp

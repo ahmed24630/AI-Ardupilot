@@ -3,7 +3,11 @@
 // any real project code exists. Replace this as you work through the
 // milestones.
 #include <iostream>
+#include <thread> // Required header
+#include "State_Context.hpp"
+
 int main() {
-    std::cout << "Hello from C++\n";
+
+    std::thread App_thread(state_machine_engine);
     return 0;
 }
