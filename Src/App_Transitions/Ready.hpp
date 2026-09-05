@@ -1,3 +1,6 @@
+#ifndef READY_HPP
+#define READY_HPP
+
 #include "State_Context.hpp"
 
 class READY : public state {
@@ -7,3 +10,5 @@ public:
 };
 
 extern READY Ready_State;
+
+#endif //READY_HPP

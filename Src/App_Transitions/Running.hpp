@@ -1,7 +1,8 @@
+#ifndef RUNNING_HPP
+#define RUNNING_HPP
+
 #include <iostream>
 #include "State_Context.hpp"
-#include "Ready.hpp"
-#include "Stop.hpp"
 
 
 class RUNNING : public state {
@@ -11,3 +12,5 @@ public:
 };
 
 extern RUNNING Running_State;
+
+#endif //RUNNING_HPP

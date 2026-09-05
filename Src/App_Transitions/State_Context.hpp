@@ -1,3 +1,6 @@
+#ifndef STATE_CONTEXT_HPP
+#define STATE_CONTEXT_HPP
+
 #include <iostream>
 
 enum class Event {
@@ -13,3 +16,5 @@ class state {
         virtual std::string name() const = 0;
 
 };
+
+#endif // State_Context
