@@ -52,6 +52,8 @@ message(STATUS "Building with sources: ${PROJECT_SOURCES}")
 
 add_executable(ai_ARDUPILOT ${PROJECT_SOURCES})
 
+target_include_directories(ai_ARDUPILOT PRIVATE ${CMAKE_SOURCE_DIR}/Src/App_Transitions)
+
 # --- Common flags for every target ----------------------------------------
 target_compile_options(ai_ARDUPILOT PRIVATE -Wall -Wextra -O2)
 
