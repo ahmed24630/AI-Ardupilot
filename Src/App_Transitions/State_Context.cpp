@@ -20,8 +20,11 @@ void state_machine_engine() {
     context ctx; // The State Machine lives entirely inside this function!
     // Thread safely freezes right here, consuming 0% CPU power until nudged
     Event requested_event = Event::EVENT_STOP;//g_mailbox.pop(g_engine_running);
+
+    int input;
     while (true) {
-        std::cin >> requested_event; // Read the event from standard input
+        std::cin >> input;
+        Event requested_event = static_cast<Event>(input);
 
         ctx.handle_event(requested_event);
 
