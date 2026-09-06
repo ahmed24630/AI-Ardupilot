@@ -17,6 +17,10 @@ class state {
 
 };
 
+state Running_state;
+state Ready_state;
+state Stop_state;
+
 extern void state_machine_engine(void);
 
 
