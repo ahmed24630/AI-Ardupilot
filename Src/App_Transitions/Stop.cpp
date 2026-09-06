@@ -1,4 +1,6 @@
 #include "Stop.hpp"
+#include "Running.hpp"
+#include "Ready.hpp"
 
 extern READY Ready_State;
 extern RUNNING Running_State;
