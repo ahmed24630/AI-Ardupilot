@@ -4,6 +4,7 @@
 
 class context {
     public:
+        context() : current(Ready_State) {}   // pick whichever state should be "first"
         state* current;
         void handle_event(Event e){current = current->handle(e);}
 };
