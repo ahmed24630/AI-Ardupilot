@@ -6,9 +6,8 @@
 class READY : public state {
 public:
     state* handle(Event e) override;
-    std::string name() const override { return "READY"; }
+    std::string name() const override;
 };
 
-extern READY Ready_State;
 
 #endif //READY_HPP

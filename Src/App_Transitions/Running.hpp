@@ -8,9 +8,7 @@
 class RUNNING : public state {
 public:
     state* handle(Event e) override;
-    std::string name() const override { return "RUNNING"; }
+    std::string name() const override;
 };
-
-extern RUNNING Running_State;
 
 #endif //RUNNING_HPP

@@ -17,9 +17,9 @@ class state {
 
 };
 
-state* Running_state;
-state* Ready_state;
-state* Stop_state;
+state* Running_State;
+state* Ready_State;
+state* Stop_State;
 
 extern void state_machine_engine(void);
 
