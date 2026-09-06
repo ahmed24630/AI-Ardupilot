@@ -1,6 +1,6 @@
 #include "Stop.hpp"
 
-state* Stop::handle(Event e) {
+state* STOP::handle(Event e) {
     state* Next_state = Ready_State;
     if (e == Event::EVENT_STOP){
         Next_state = Stop_State;
@@ -14,6 +14,6 @@ state* Stop::handle(Event e) {
     return Next_state;
 };
 
-std::string Stop::name() const {
+std::string STOP::name() const {
     return "STOP";
 };
