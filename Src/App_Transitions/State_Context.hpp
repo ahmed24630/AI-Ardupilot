@@ -2,6 +2,9 @@
 #define STATE_CONTEXT_HPP
 
 #include <iostream>
+#include "Ready.hpp"
+#include "Running.hpp"
+#include "Stop.hpp"
 
 enum class Event {
     EVENT_READY,
