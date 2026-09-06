@@ -1,6 +1,8 @@
 #include "State_Context.hpp"
 #include <atomic>
-
+#include "Stop.hpp"
+#include "Running.hpp"
+#include "Ready.hpp"
 
 READY Ready_State;
 RUNNING Running_State;
