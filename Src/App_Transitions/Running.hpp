@@ -1,6 +1,7 @@
 #ifndef RUNNING_HPP
 #define RUNNING_HPP
 
+#include "State_Context.hpp"
 
 
 class RUNNING : public state {

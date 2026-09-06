@@ -2,9 +2,6 @@
 #define STATE_CONTEXT_HPP
 
 #include <iostream>
-#include "Ready.hpp"
-#include "Running.hpp"
-#include "Stop.hpp"
 
 enum class Event {
     EVENT_READY,
@@ -19,10 +16,6 @@ class state {
         virtual std::string name() const = 0;
 
 };
-
-extern READY Ready_State;
-extern RUNNING Running_State;
-extern STOP Stop_State;
 
 extern void state_machine_engine(void);
 

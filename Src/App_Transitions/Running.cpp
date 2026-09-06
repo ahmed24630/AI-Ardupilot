@@ -1,5 +1,8 @@
 #include "Running.hpp"
-#include "State_Context.hpp"
+
+extern READY Ready_State;
+extern RUNNING Running_State;
+extern STOP Stop_State;
 
 state* RUNNING::handle(Event e) {
     state* Next_state = &Ready_State;
