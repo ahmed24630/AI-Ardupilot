@@ -23,5 +23,7 @@ void state_machine_engine() {
         Event requested_event = Event::EVENT_RUNNING;//g_mailbox.pop(g_engine_running);
         
         ctx.handle_event(requested_event);
+
+        cout << "Current state: " << ctx.current->name() << std::endl;
     }
 }
