@@ -18,10 +18,11 @@ class context {
 
 void state_machine_engine() {
     context ctx; // The State Machine lives entirely inside this function!
+    // Thread safely freezes right here, consuming 0% CPU power until nudged
+    Event requested_event = Event::EVENT_STOP;//g_mailbox.pop(g_engine_running);
     while (true) {
-        // Thread safely freezes right here, consuming 0% CPU power until nudged
-        Event requested_event = Event::EVENT_RUNNING;//g_mailbox.pop(g_engine_running);
-        
+        std::cin >> requested_event; // Read the event from standard input
+
         ctx.handle_event(requested_event);
 
         std::cout << "Current state: " << ctx.current->name() << std::endl;

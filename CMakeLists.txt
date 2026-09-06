@@ -55,7 +55,25 @@ add_executable(ai_ARDUPILOT ${PROJECT_SOURCES})
 target_include_directories(ai_ARDUPILOT PRIVATE ${CMAKE_SOURCE_DIR}/Src/App_Transitions)
 
 # --- Common flags for every target ----------------------------------------
-target_compile_options(ai_ARDUPILOT PRIVATE -Wall -Wextra -O2)
+target_compile_options(ai_ARDUPILOT PRIVATE -Wall -Wextra)
+
+# --- Debug vs Release build type -------------------------------------------
+# Default to a Debug build (unoptimized, with symbols) unless the person
+# explicitly asks for Release. -O2 (your existing default) actively hurts
+# debugging: the optimizer reorders and inlines code, so gdb's "current
+# line" often won't match what you'd expect, and some variables get
+# optimized away entirely before gdb can ever show you their value.
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Debug)
+endif()
+
+message(STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_compile_options(ai_ARDUPILOT PRIVATE -g -O0)
+else()
+    target_compile_options(ai_ARDUPILOT PRIVATE -O2)
+endif()
 
 # Statically link the C++ runtime so the binary doesn't depend on the
 # target board having a matching libstdc++/libgcc version — same reasoning
