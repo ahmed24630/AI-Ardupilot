@@ -2,13 +2,14 @@
 #include <atomic>
 
 
-state* Running_State;
-state* Ready_State;
-state* Stop_State;
+READY Ready_State;
+RUNNING Running_State;
+STOP Stop_State;
+
 std::atomic<bool> g_engine_running(true);
 class context {
     public:
-        context() : current(Ready_State) {}   // pick whichever state should be "first"
+        context() : current(&Ready_State) {}   // pick whichever state should be "first"
         state* current;
         void handle_event(Event e){current = current->handle(e);}
 };

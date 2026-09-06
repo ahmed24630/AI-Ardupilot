@@ -9,5 +9,7 @@
 int main() {
 
     std::thread App_thread(state_machine_engine);
+
+    App_thread.join();
     return 0;
 }
