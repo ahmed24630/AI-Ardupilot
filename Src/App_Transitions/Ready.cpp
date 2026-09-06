@@ -2,15 +2,17 @@
 
 
 state* READY::handle(Event e) {
+    state* Next_state = Ready_State;
     if (e == Event::EVENT_READY){
-        return Ready_State;
+        Next_state = Ready_State;
     }
     if (e == Event::EVENT_RUNNING){
-        return Running_State;
+        Next_state = Running_State;
     }
     if (e == Event::EVENT_STOP){
-        return Stop_State;
+        Next_state = Stop_State;
     }
+    return Next_state;
 };
 
 std::string READY::name() const {
