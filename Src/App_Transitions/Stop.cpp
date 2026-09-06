@@ -1,5 +1,11 @@
 #include "Stop.hpp"
 
+
+
+extern state* Running_State;
+extern state* Ready_State;
+extern state* Stop_State;
+
 state* STOP::handle(Event e) {
     state* Next_state = Ready_State;
     if (e == Event::EVENT_STOP){

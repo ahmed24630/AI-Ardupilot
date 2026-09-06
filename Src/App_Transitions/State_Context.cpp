@@ -8,6 +8,9 @@ class context {
         void handle_event(Event e){current = current->handle(e);}
 };
 
+state* Running_State;
+state* Ready_State;
+state* Stop_State;
 std::atomic<bool> g_engine_running(true);
 
 void state_machine_engine() {
