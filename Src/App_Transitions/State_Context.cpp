@@ -24,6 +24,6 @@ void state_machine_engine() {
         
         ctx.handle_event(requested_event);
 
-        cout << "Current state: " << ctx.current->name() << std::endl;
+        std::cout << "Current state: " << ctx.current->name() << std::endl;
     }
 }
