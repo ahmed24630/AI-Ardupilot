@@ -18,3 +18,4 @@ void state_machine_engine() {
         
         ctx.handle_event(requested_event);
     }
+}
