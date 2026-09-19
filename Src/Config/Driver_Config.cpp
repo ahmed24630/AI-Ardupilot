@@ -1,6 +1,12 @@
 
 #include "Driver_Config.hpp" 
-#include <stdexcept>
+#include <unistd.h>      // read, write, close
+#include <fcntl.h>       // open, O_RDWR, O_NOCTTY, O_SYNC
+#include <termios.h>     // termios struct, tcgetattr, tcsetattr, cfsetispeed/ospeed, CS8, etc.
+#include <sys/socket.h>  // socket, connect, send, recv, AF_INET, SOCK_DGRAM, SOCK_STREAM
+#include <netinet/in.h>  // sockaddr_in, htons
+#include <arpa/inet.h>   // inet_pton
+#include <stdexcept>     // std::runtime_error (from last round)
 
         
 USBCommDriver::USBCommDriver(const std::string& path, int baud, int handle) : device_path(path), baud_rate(baud), device_handle(handle) {}
