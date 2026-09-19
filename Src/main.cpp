@@ -8,7 +8,7 @@
 #include "Driver_Config.hpp"
 
 
-const CommDriverConfig driver_test_config = {
+CommDriverConfig driver_test_config = {
     .transport = TransportType::SERIAL,
     .device_path = "/dev/ttyUSB0",
     .baud_rate = 57600,
