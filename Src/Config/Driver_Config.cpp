@@ -1,9 +1,9 @@
 
 #include "Driver_Config.hpp" 
-
+#include <stdexcept>
 
         
-USBCommDriver::USBCommDriver(const STD::string& path, int baud, int handle) : device_path(path), baud_rate(baud), device_handle(handle) {}
+USBCommDriver::USBCommDriver(const std::string& path, int baud, int handle) : device_path(path), baud_rate(baud), device_handle(handle) {}
         
 ssize_t USBCommDriver::Send(const uint8_t* data, size_t len)
 {
