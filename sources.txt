@@ -15,6 +15,8 @@ Src/App_Transitions/Stop.cpp
 Src/App_Transitions/Stop.hpp
 Src/App_Transitions/State_Context.cpp
 Src/App_Transitions/State_Context.hpp
+Src/Config/Driver_Config.cpp
+Src/Config/Driver_Config.hpp
 
 
 # Add more as you build them, e.g.:
