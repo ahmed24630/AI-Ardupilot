@@ -32,7 +32,7 @@ class USBCommDriver : public ICommDriver {
         int baud_rate;
         int device_handle;
     public:
-        USBCommDriver(const std::string& path, int baud, int handle) : device_path(path), baud_rate(baud), device_handle(handle) {}
+        USBCommDriver(const std::string& path, int baud, int handle);
         ssize_t Send(const uint8_t* data, size_t len) override;
         ssize_t Receive(uint8_t* buffer, size_t maxLen) override;
         bool Connect() override;
@@ -43,7 +43,7 @@ class UDPCommDriver : public ICommDriver {
         int port;
         int UDP_handle;
     public: 
-        UDPCommDriver(const std::string& ip, int port, int handle) : IP(ip), port(port), UDP_handle(handle) {}
+        UDPCommDriver(const std::string& ip, int port, int handle);
         ssize_t Send(const uint8_t* data, size_t len) override;
         ssize_t Receive(uint8_t* buffer, size_t maxLen) override;
         bool Connect() override;
@@ -54,7 +54,7 @@ class TCPCommDriver : public ICommDriver {
         int port;
         int socket_handle;
     public:
-        TCPCommDriver(const std::string& ip, int port, int handle) : IP(ip), port(port), socket_handle(handle) {}
+        TCPCommDriver(const std::string& ip, int port, int handle);
         ssize_t Send(const uint8_t* data, size_t len) override;
         ssize_t Receive(uint8_t* buffer, size_t maxLen) override;
         bool Connect() override;
