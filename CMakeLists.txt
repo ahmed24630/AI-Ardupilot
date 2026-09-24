@@ -66,7 +66,7 @@ set(BUILD_SHARED_LIBS OFF CACHE BOOL "Static linking - simpler to deploy to boar
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/Src/MAVSDK/cpp)
 
-target_link_libraries(ai_ARDUPILOT PRIVATE MAVSDK::mavsdk)
+target_link_libraries(ai_ARDUPILOT PRIVATE mavsdk)
 
 # --- Common flags for every target ----------------------------------------
 target_compile_options(ai_ARDUPILOT PRIVATE -Wall -Wextra)
