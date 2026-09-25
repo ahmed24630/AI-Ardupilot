@@ -5,7 +5,7 @@
 #include <iostream>
 #include <thread> // Required header
 #include "State_Context.hpp"
-#include "Driver_Config.hpp"
+#include "AppConfig.hpp"
 
 
 CommDriverConfig driver_test_config = {
@@ -31,7 +31,7 @@ CommDriverConfig driver_test_config = {
 
 int main() {
 
-    CommDriverConfiguration(&driver_test_config);
+    check_Mavsdk_Config();
 
     std::thread App_thread(state_machine_engine);
 
