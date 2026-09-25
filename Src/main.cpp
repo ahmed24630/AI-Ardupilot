@@ -31,7 +31,7 @@
 
 int main() {
 
-    check_Mavsdk_Config("udp", 14540, 10.0);
+    StartCommunication("udp", 14540, 10.0);
 
     std::thread App_thread(state_machine_engine);
 

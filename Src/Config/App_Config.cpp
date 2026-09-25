@@ -5,7 +5,7 @@
 mavsdk::Mavsdk::Configuration config{mavsdk::ComponentType::CompanionComputer};
 mavsdk::Mavsdk mavobj(config);
 
-void check_Mavsdk_Config(std::string connection_type, double port, double timeout_seconds){
+void StartCommunication(std::string connection_type, double port, double timeout_seconds){
 
     mavsdk::ConnectionResult Commstatus = mavobj.add_any_connection(connection_type + "://" + std::to_string(port));
 
