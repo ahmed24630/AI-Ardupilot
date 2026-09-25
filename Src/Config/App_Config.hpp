@@ -7,6 +7,6 @@
 //     ModelConfig model;
 // };
 
-extern void check_Mavsdk_Config();
+extern void check_Mavsdk_Config(std::string connection_type, double port, double timeout_seconds);
 
 #endif // APP_CONFIG_HPP
