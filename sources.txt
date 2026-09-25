@@ -16,7 +16,7 @@ Src/App_Transitions/Stop.hpp
 Src/App_Transitions/State_Context.cpp
 Src/App_Transitions/State_Context.hpp
 Src/Config/App_Config.cpp
-Src/Config/APP_Config.hpp
+Src/Config/App_Config.hpp
 
 
 # Add more as you build them, e.g.:
