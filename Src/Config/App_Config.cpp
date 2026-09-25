@@ -1,6 +1,6 @@
-#include <mavsdk/mavsdk.hpp>
-#include <iostream>
 #include "App_Config.hpp"
+#include "mavsdk.hpp"
+#include <iostream>
 
 mavsdk::Mavsdk::Configuration config{mavsdk::ComponentType::CompanionComputer};
 mavsdk::Mavsdk mavobj(config);
