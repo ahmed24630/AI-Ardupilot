@@ -68,6 +68,25 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/Src/MAVSDK/cpp)
 
 target_link_libraries(ai_ARDUPILOT PRIVATE mavsdk)
 
+# --- llama.cpp integration ---------------------------------------------------
+# llama.cpp is pulled in as a git submodule at Src/AI/Router/llama.cpp.
+# We use it as an in-process static library; no llama.cpp server/tools are
+# required because the application will call the llama API directly.
+
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build llama.cpp statically" FORCE)
+
+set(LLAMA_BUILD_COMMON OFF CACHE BOOL "Disable llama.cpp common library" FORCE)
+set(LLAMA_BUILD_TESTS OFF CACHE BOOL "Disable llama.cpp tests" FORCE)
+set(LLAMA_BUILD_TOOLS OFF CACHE BOOL "Disable llama.cpp tools" FORCE)
+set(LLAMA_BUILD_EXAMPLES OFF CACHE BOOL "Disable llama.cpp examples" FORCE)
+set(LLAMA_BUILD_SERVER OFF CACHE BOOL "Disable llama.cpp server" FORCE)
+set(LLAMA_BUILD_APP OFF CACHE BOOL "Disable llama.cpp unified app" FORCE)
+
+add_subdirectory(${CMAKE_SOURCE_DIR}/Src/AI/Router/llama.cpp)
+
+target_link_libraries(ai_ARDUPILOT PRIVATE llama)
+
+
 # --- Common flags for every target ----------------------------------------
 target_compile_options(ai_ARDUPILOT PRIVATE -Wall -Wextra)
 

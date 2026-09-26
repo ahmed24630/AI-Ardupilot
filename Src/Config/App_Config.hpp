@@ -12,5 +12,5 @@
 // };
 
 extern void StartCommunication(std::string connection_type, uint16_t port, double timeout_seconds);
-
+extern void send_HeartBeat(void);
 #endif // APP_CONFIG_HPP

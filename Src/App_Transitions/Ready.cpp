@@ -1,12 +1,14 @@
 #include "Stop.hpp"
 #include "Running.hpp"
 #include "Ready.hpp"
+#include "App_Config.hpp"
 
 extern READY Ready_State;
 extern RUNNING Running_State;
 extern STOP Stop_State;
 
 state* READY::handle(Event e) {
+    send_HeartBeat();
     state* Next_state = &Ready_State;
     if (e == Event::EVENT_READY){
         Next_state = &Ready_State;
