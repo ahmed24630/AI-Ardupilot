@@ -2,6 +2,8 @@
 #define APP_CONFIG_HPP
 
 #include <string>
+#include <iostream>
+#include <cstdint>
 // struct AppConfig {
 //     std::string board_type;
 //     HostingMode hosting_mode;                    // new field
