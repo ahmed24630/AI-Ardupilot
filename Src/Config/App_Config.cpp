@@ -10,7 +10,7 @@ void StartCommunication(std::string connection_type, double port, double timeout
     mavsdk::ConnectionResult Commstatus = mavobj.add_any_connection(connection_type + "://0.0.0.0:" + std::to_string(port));
 
     if(Commstatus != mavsdk::ConnectionResult::Success){
-        std::cout << "Failed to connect: " << std::endl;
+        std::cout << "Failed to connect: code " << static_cast<int>(Commstatus) << std::endl;
         return;
     }
 
