@@ -1,3 +1,6 @@
 [submodule "Src/MAVSDK"]
 	path = Src/MAVSDK
 	url = https://github.com/mavlink/MAVSDK.git
+[submodule "Src/AI/Router/llama.cpp"]
+	path = Src/AI/Router/llama.cpp
+	url = https://github.com/ggml-org/llama.cpp.git
