@@ -9,6 +9,6 @@
 //     ModelConfig model;
 // };
 
-extern void StartCommunication(std::string connection_type, double port, double timeout_seconds);
+extern void StartCommunication(std::string connection_type, uint16_t port, double timeout_seconds);
 
 #endif // APP_CONFIG_HPP
