@@ -8,7 +8,7 @@ extern RUNNING Running_State;
 extern STOP Stop_State;
 
 state* READY::handle(Event e) {
-    send_HeartBeat();
+    Read_Battery();
     state* Next_state = &Ready_State;
     if (e == Event::EVENT_READY){
         Next_state = &Ready_State;
