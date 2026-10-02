@@ -68,7 +68,11 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/Src/MAVSDK/cpp)
 
 target_link_libraries(ai_ARDUPILOT PRIVATE mavsdk)
 
-target_include_directories(ai_ARDUPILOT PRIVATE ${CMAKE_SOURCE_DIR}/Src/MAVSDK/cpp/src/mavsdk/plugins)
+target_include_directories(ai_ARDUPILOT PRIVATE ${CMAKE_SOURCE_DIR}/Src/MAVSDK/cpp/src/mavsdk)
+target_include_directories(mavsdk PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    ...
+)
 # --- llama.cpp integration ---------------------------------------------------
 # llama.cpp is pulled in as a git submodule at Src/AI/Router/llama.cpp.
 # We use it as an in-process static library; no llama.cpp server/tools are
