@@ -45,34 +45,30 @@ target_include_directories(ai_ARDUPILOT PRIVATE ${CMAKE_SOURCE_DIR}/Src/App_Tran
 target_include_directories(ai_ARDUPILOT PRIVATE ${CMAKE_SOURCE_DIR}/Src/Config)
 
 # --- MAVSDK integration -----------------------------------------------------
-# MAVSDK is pulled in as a git submodule at Src/MAVSDK (see .gitmodules).
-# These options must be set BEFORE add_subdirectory() runs: MAVSDK's own
-# CMakeLists.txt uses option(...), which only takes effect the FIRST time a
-# cache variable is set — pre-setting it here with CACHE + FORCE means our
-# value wins instead of MAVSDK's own default.
-#
-# Confirmed directly from Src/MAVSDK/cpp/third_party/CMakeLists.txt:
-#   - grpc, absl, protobuf, re2, c-ares only build when BUILD_MAVSDK_SERVER is on
-#   - openssl, zlib-ng, curl only build when BUILD_WITHOUT_CURL is off
-#   - gtest only builds when BUILD_TESTING is on
-# With the settings below, ALL of those are skipped — the only third-party
-# deps actually built are: fmt, asio, mavlink (headers), libevents,
-# picosha2, tinyxml2, libmavlike, nlohmann_json, liblzma.
-set(BUILD_MAVSDK_SERVER OFF CACHE BOOL "Disable gRPC backend - not needed for pure C++ use" FORCE)
-set(BUILD_WITHOUT_CURL ON CACHE BOOL "Disable curl/openssl/zlib - not downloading camera definitions over HTTP" FORCE)
-set(BUILD_TESTING OFF CACHE BOOL "Skip MAVSDK's own test suite - not needed on target boards" FORCE)
-set(SUPERBUILD ON CACHE BOOL "Build MAVSDK's own lightweight deps from source" FORCE)
-set(BUILD_SHARED_LIBS OFF CACHE BOOL "Static linking - simpler to deploy to boards" FORCE)
+# MAVSDK is maintained as an unmodified Git submodule.
 
-add_subdirectory(${CMAKE_SOURCE_DIR}/Src/MAVSDK/cpp)
+set(BUILD_MAVSDK_SERVER OFF CACHE BOOL
+    "Disable MAVSDK server" FORCE)
+
+set(BUILD_WITHOUT_CURL ON CACHE BOOL
+    "Disable CURL support" FORCE)
+
+set(BUILD_TESTING OFF CACHE BOOL
+    "Disable MAVSDK tests" FORCE)
+
+set(BUILD_SHARED_LIBS OFF CACHE BOOL
+    "Build static libraries" FORCE)
+
+set(SUPERBUILD ON CACHE BOOL
+    "Build MAVSDK dependencies" FORCE)
+
+add_subdirectory(
+    "${CMAKE_CURRENT_SOURCE_DIR}/Src/MAVSDK/cpp"
+    "${CMAKE_CURRENT_BINARY_DIR}/mavsdk"
+)
 
 target_link_libraries(ai_ARDUPILOT PRIVATE mavsdk)
 
-target_include_directories(ai_ARDUPILOT PRIVATE ${CMAKE_SOURCE_DIR}/Src/MAVSDK/cpp/src/mavsdk)
-target_include_directories(mavsdk PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    ...
-)
 # --- llama.cpp integration ---------------------------------------------------
 # llama.cpp is pulled in as a git submodule at Src/AI/Router/llama.cpp.
 # We use it as an in-process static library; no llama.cpp server/tools are
