@@ -115,3 +115,47 @@ file build-rpi64/ai_ARDUPILOT-rpi64
 
 Confirm the architecture matches what you expect before copying anything
 to a board.
+
+## Running ArduPilot SITL Simulation with MAVSDK
+
+To run the integrated environment where the ArduPilot simulation communicates with this C++ codebase natively, follow these sequential steps in your Ubuntu VM:
+
+### 1. First Time Setup (Dependencies)
+If you haven't set up ArduPilot on your Ubuntu system yet, clone the repo and run the prerequisite script once:
+```bash
+# Clone ArduPilot repository
+git clone --recurse-submodules https://github.com
+cd ardupilot
+
+# Install all Ubuntu prerequisites automatically
+Tools/environment_install/install-prereqs-ubuntu.sh -y
+
+# Reload profile to apply environment path updates
+. ~/.profile
+```
+
+### 2. Launching ArduPilot SITL (Terminal 1)
+Navigate to your preferred vehicle directory inside the `ardupilot` folder (e.g., ArduCopter) and launch the simulator. 
+
+> **Crucial Network Rule:** Since this C++ application calls MAVSDK with `StartCommunication("udpin", 14540, 10.0);`, it sets up a local passive **Listener** on port 14540. Therefore, you must force SITL to act as the active **Sender** (`udpout`) to target localhost on that exact port:
+
+```bash
+cd ardupilot/ArduCopter
+
+# Launch simulation with map, console, and targeted MAVLink routing
+../Tools/autotest/sim_vehicle.py --map --console --out=udpout:127.0.0.1:14540
+```
+*Note: Use the `-w` flag (e.g., `sim_vehicle.py -w ...`) during the very first boot to wipe and clean the virtual EEPROM configurations.*
+
+### 3. Compiling and Executing the Companion App (Terminal 2)
+While the SITL simulation is fully running and active in Terminal 1 (showing the `MAV>` prompt), open a new terminal tab to build and execute your native C++ code:
+
+```bash
+# Build the native app using CMake
+cmake -B build/native -DBOARD=native
+cmake --build build/native
+
+# Run your compiled binary
+./build/native/bin/ai_pilot_setup-native
+```
+The application will safely bind to `0.0.0.0:14540`, consume the active telemetry streams coming out of the ArduPilot simulator, successfully resolve the `Autopilot found.` state via MAVSDK, and safely launch the multi-threaded state engine.
